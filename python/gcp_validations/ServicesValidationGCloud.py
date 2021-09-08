@@ -1,5 +1,6 @@
 import json
 import subprocess
+import argparse
 from tabulate import tabulate
 import Services_Validations
 
@@ -48,17 +49,19 @@ def printvalidationerror(outputdict):
     
     ##Print Validation Result
     if len(successlist) > 0:
-        print("List of validated resources successfully------------------\n")
+        print("\n\nList of validated resources successfully------------------\n")
         print(tabulate(successlist, headers=["Resource Id","Status"]))
 
     if len(errorlist) > 0:
         print("\n\nList of validation failed resources with error------------")
         print(tabulate(errorlist, headers=["Resource Id", "Error"]))
-        
-
 
 def main():
-    f = open("../terraform.tfvars","r")
+    parser = argparse.ArgumentParser(description='Process some gcp validations')
+    parser.add_argument('--tfvars_file_path', help='Path of .tfvars file',required=True)
+    args = parser.parse_args()
+
+    f = open(args.tfvars_file_path, "r")
     output = f.readlines()
     outputdict = {}
     
